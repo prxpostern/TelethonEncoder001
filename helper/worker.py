@@ -80,7 +80,7 @@ async def encc(e):
             ],
         )
         #cmd = f'ffmpeg -i "{dl}" -preset ultrafast -c:v libx265 -crf 27 -map 0:v -c:a aac -map 0:a -c:s copy -map 0:s? "{out}" -y'
-        cmd = f'ffmpeg -i "{dl}" -c:v libx264 -s 320*240 -c:a libmp3lame -ar 48000 -ab 64k "{out}" -y'
+        cmd = f'ffmpeg -i "{dl}" -c:v libx264 -crf 20 -s 320*240 -c:a libmp3lame -af "pan=stereo|c0=c01|c1=c1" -ar 48000 -ab 64k "{out}" -y'
         process = await asyncio.create_subprocess_shell(
             cmd, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE
         )
@@ -151,7 +151,7 @@ async def sample(e):
         ],
     )
     #ncmd = f'ffmpeg -i "{dl}" -preset ultrafast -ss {ss} -to {dd} -c:v libx265 -crf 27 -map 0:v -c:a aac -map 0:a -c:s copy -map 0:s? "{out}" -y'
-    ncmd = f'ffmpeg -i "{dl}" -ss {ss} -to {dd} -c:v libx264 -crf 20 -s 320*240 -c:a libmp3lame -af "pan=stereo|c0=c01|c1=c1" -ar 48000 -ab 64k "{out}" -y'
+    ncmd = f'ffmpeg -i "{dl}" -ss {ss} -to {dd} -c:v libx264 -preset ultrafast -c:a copy "{out}" -y'
     process = await asyncio.create_subprocess_shell(
         ncmd, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE
     )
@@ -328,7 +328,7 @@ async def customenc(e, key):
         ],
     )
     #cmd = f'ffmpeg -i "{dl}" -preset ultrafast -c:v libx265 -crf 27 -map 0:v -c:a aac -map 0:a -c:s copy -map 0:s? "{out}" -y'
-    cmd = f'ffmpeg -i "{dl}" -c:v libx264 -s 712*534 -crf 21 -c:a libmp3lame -af "pan=stereo|c0=c01|c1=c1" -ar 48000 -ab 128k -c:s copy "{out}" -y'
+    cmd = f'ffmpeg -i "{dl}" -c:v libx264 -preset ultrafast -c:a copy -c:s copy "{out}" -y'
     process = await asyncio.create_subprocess_shell(
         cmd, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE
     )
@@ -336,7 +336,7 @@ async def customenc(e, key):
     er = stderr.decode()
     try:
         if er:
-            await e.edit(str(er) + "\n\n**ERROR** Contact @ali110ali")
+            await e.edit(str(er) + "\n\n**ERROR** Contact @danish_00")
             COUNT.remove(e.chat_id)
             os.remove(dl)
             return os.remove(out)
